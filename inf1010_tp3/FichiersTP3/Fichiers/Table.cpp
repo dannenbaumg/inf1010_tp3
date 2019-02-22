@@ -14,11 +14,11 @@ Table::Table() {
 	clientPrincipal_ = nullptr;
 }
 
-Table::Table(int id, int nbPlaces, Client* clientPrincipal) {
+Table::Table(int id, int nbPlaces) {
 	id_ = id;
 	nbPlaces_ = nbPlaces;
 	nbClientsATable_ = 0;
-	clientPrincipal_ = clientPrincipal;
+	clientPrincipal_ = nullptr;
 }
 
 //getters
@@ -48,7 +48,7 @@ vector<Plat*> Table::getCommande() const
 	return commande_;
 }
 
-Client * Table::getCliengtPrincipal() const
+Client * Table::getClientPrincipal() const
 {
 	return clientPrincipal_;
 }
@@ -61,7 +61,7 @@ void Table::setId(int id) {
 
 void Table::setClientPrincipal(Client * clientPrincipal)
 {
-	clientPrincipal_ = clientPrincipal;
+	clientPrincipal_ = new Client(*clientPrincipal);
 }
 
 
@@ -95,7 +95,7 @@ double Table::getChiffreAffaire() const {
 				break;
 			case Custom:
 				chiffre += commande_[i]->getPrix() - commande_[i]->getCout();
-				chiffre += static_cast <PlatCustom*> (commande_[i])->getSupplement;
+				chiffre += static_cast <PlatCustom*> (commande_[i])->getSupplement();
 				break;
 
 		}

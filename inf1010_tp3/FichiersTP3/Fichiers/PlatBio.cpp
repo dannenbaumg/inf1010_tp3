@@ -5,7 +5,7 @@ using namespace std;
 
 
 	// constructeurs
-	PlatBio::PlatBio(string nom = "inconnu", double prix = 0, double cout = 0, double ecotaxe = 0) {
+	PlatBio::PlatBio(string nom, double prix, double cout, double ecotaxe ) {
 		nom_ = nom;
 		prix_ = prix;
 		cout_ = cout;
@@ -29,4 +29,5 @@ using namespace std;
 	ostream & operator<<(ostream & os, const PlatBio & plat)
 	{
 		os << "comprend une taxe ecologique de : " << plat.ecoTaxe_ << endl;
+		return os;
 	}

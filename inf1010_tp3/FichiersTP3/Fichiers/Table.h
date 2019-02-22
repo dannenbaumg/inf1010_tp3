@@ -16,7 +16,7 @@ class Table {
 public:
 	//constructeurs
 	Table();
-	Table(int id, int nbPlaces, Client* clientPrincipale);
+	Table(int id, int nbPlaces);
 
 
 	//getters
@@ -26,7 +26,7 @@ public:
 	bool estPleine() const; 
 	int getNbClientsATable() const; 
 	vector<Plat*> getCommande() const;
-	Client* getCliengtPrincipal() const; 
+	Client* getClientPrincipal() const; 
 	double getChiffreAffaire() const;
 
 

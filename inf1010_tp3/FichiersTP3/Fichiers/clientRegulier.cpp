@@ -11,6 +11,7 @@ ClientRegulier::ClientRegulier(string nom, string prenom, int tailleGroupe, int 
 	prenom_ = prenom;
 	tailleGroupe_ = tailleGroupe;
 	nbPoints_ = nbPoints;
+	statut_ = Fidele;
 }
 
 int ClientRegulier::getNbPoints()
@@ -26,5 +27,6 @@ void ClientRegulier::augmenterNbPoints(int bonus)
 ostream & operator<<(ostream & os, const ClientRegulier & client)
 {
 	os << "Posede " << client.nbPoints_ << " points." << endl;
+	return os;
 
 }

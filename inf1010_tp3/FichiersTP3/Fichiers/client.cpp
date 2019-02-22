@@ -48,7 +48,7 @@ string Client::convertirStatutString() const
 			return "Occasionnel";
 		break;
 		case Fidele:
-			return "Fidele";
+			return "Regulier";
 		break;
 		case Prestige:
 			return "Prestige";
@@ -59,4 +59,5 @@ string Client::convertirStatutString() const
 ostream & operator<<(ostream & os, const Client & client)
 {
 	os << client.nom_[0] << client.prenom_ << "statut : " << client.convertirStatutString();
+	return os;
 }

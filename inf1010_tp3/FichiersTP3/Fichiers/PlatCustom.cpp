@@ -33,4 +33,5 @@ double PlatCustom::calculerSupplement() const
 ostream & operator<<(ostream & os, const PlatCustom & plat)
 {
 	os << "contient " << plat.nbIngredients_ << " element modifier pour un supplement total de : " << plat.supplement_ << endl;
+	return os; 
 }

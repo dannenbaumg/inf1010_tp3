@@ -13,6 +13,7 @@ ClientPrestige::ClientPrestige(string nom, string prenom, int tailleGroupe, int 
 	tailleGroupe_ = tailleGroupe;
 	nbPoints_ = nbPoints;
 	addresse_ = addresse;
+	statut_ = Prestige;
 }
 
 AddressCode ClientPrestige::getAddresseCode()
@@ -38,4 +39,5 @@ string ClientPrestige::getAddressCodeString()
 ostream & operator<<(ostream & os, ClientPrestige client)
 {
 	os << "Habite dans la zone " << client.getAddressCodeString() << endl;
+	return os;
 }
