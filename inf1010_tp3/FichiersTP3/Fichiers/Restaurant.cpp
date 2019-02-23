@@ -57,7 +57,7 @@ Restaurant::~Restaurant() {
 	delete menuMatin_; 
 	delete menuMidi_; 
 	delete menuSoir_; 
-	for (unsigned i = 0; i < tables_.size(); ++i)
+	for (unsigned i = 0; i < tables_.size() -1; ++i)
 		delete tables_[i];
 
 }
@@ -98,24 +98,54 @@ void Restaurant::libererTable(int id) {
 
 	for (unsigned i = 0; i < tables_.size(); ++i) {
 		if (id == tables_[i]->getId()) {
-			switch (tables_[i]->getClientPrincipal()->getStatut()) {
-			case Occasionnel:
-				break;
-			case Fidele:
-				reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
-				break;
-			case Prestige:
-				if (tables_[i]->getId() == INDEX_TABLE_LIVRAISON) {
-					livraison = true;
+			if (tables_[i]->estOccupee()) {
+				switch (tables_[i]->getClientPrincipal()->getStatut()) {
+				case Occasionnel:
+					break;
+				case Fidele:
+					reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
+					break;
+				case Prestige:
+					if (tables_[i]->getId() == INDEX_TABLE_LIVRAISON) {
+						livraison = true;
+					}
+					reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
+					break;
 				}
-				reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
-				break;
+				chiffreAffaire_ += (tables_[i]->getChiffreAffaire() - reduction);
+				tables_[i]->libererTable();
 			}
-			chiffreAffaire_ += (tables_[i]->getChiffreAffaire() - reduction); 
-			tables_[i]->libererTable(); 
 			break;
 		}
 	}
+}
+
+
+double Restaurant::calculerReduction(Client * client, double montant, bool livraison)
+{
+	double reduction = 0.0;
+	switch (client->getStatut())
+	{
+	case Regulier:
+		if (static_cast<ClientRegulier*>(client)->getNbPoints() > SEUIL_DEBUT_REDUCTION) {
+			return montant * TAUX_REDUC_REGULIER;
+
+		}
+		break;
+	case Prestige:
+
+		if (static_cast<ClientPrestige*>(client)->getNbPoints() > SEUIL_DEBUT_REDUCTION) {
+			reduction += montant * TAUX_REDUC_PRESTIGE;
+			if (static_cast<ClientPrestige*>(client)->getNbPoints() < SEUIL_LIVRAISON_GRATUITE && livraison) {
+				reduction -= getFraisTransports(static_cast<ClientPrestige*>(client)->getAddresseCode());
+			}
+		}
+		break;
+	default:
+
+		break;
+	}
+	return reduction;
 }
 
 
@@ -281,7 +311,7 @@ void Restaurant::placerClients(Client* client) {
 
 
 
-	for (unsigned int i = 0; i < client->getTailleGroupe(); i++) {
+	for (unsigned int i = 0; i < tables_.size(); i++) {
 		if (tables_[i]->getNbPlaces() >= client->getTailleGroupe() && !tables_[i]->estOccupee() && tables_[i]->getNbPlaces() < minimum) {
 			indexTable = i;
 			minimum = tables_[i]->getNbPlaces();
@@ -291,8 +321,12 @@ void Restaurant::placerClients(Client* client) {
 	if (indexTable == -1) {
 		cout << "Erreur : il n'y a plus/pas de table disponible pour les clients. " << endl;
 	}
-	else
+	else {
 		tables_[indexTable]->placerClients(client->getTailleGroupe());
+		tables_[indexTable]->setClientPrincipal(client);
+	}
+		
+
 }
 
 void Restaurant::livrerClient(Client * client, vector<string> commande)
@@ -302,54 +336,27 @@ void Restaurant::livrerClient(Client * client, vector<string> commande)
 	if (client->getStatut() == Prestige) {
 		
 		for (unsigned int i = 0; i < commande.size(); i++) {
-			
-			commanderPlat(commande[i], INDEX_TABLE_LIVRAISON);
+
+			commanderPlat(commande[i], tables_[INDEX_TABLE_LIVRAISON]->getId());
 		}
-		if (commande.size() == 0) {
-			cout << "Erreur: table vide out plat introuvable";
-		}
-		else {
+		if (commande.size() > 0){
 			cout << "Statut de la table de livraison : (Table numero " << tables_[INDEX_TABLE_LIVRAISON]->getId() << ") :" << endl;
 			cout << *tables_[INDEX_TABLE_LIVRAISON];
+		}
+		else
+		{
+			cout << "Erreur: table vide ou plat introuvable" << endl;
 		}
 	
 	}
 	else
 	{
-		cout << "Le client " << client->getPrenom() << "n'est pas admissible a la livraison." << endl;
+		cout << "Le client " << client->getNom() << " n'est pas admissible a la livraison." << endl;
 	}
 
 	libererTable(tables_[INDEX_TABLE_LIVRAISON]->getId());
 
 }
-
-double Restaurant::calculerReduction(Client * client, double montant, bool livraison)
-{
-	double reduction = 0.0;
-	switch (client->getStatut())
-	{
-		case Regulier:
-			if (static_cast<ClientRegulier*>(client)->getNbPoints() > SEUIL_DEBUT_REDUCTION) {
-				return montant * TAUX_REDUC_REGULIER;
-				
-			}
-			break;
-		case Prestige: 
-			
-			if (static_cast<ClientPrestige*>(client)->getNbPoints() > SEUIL_DEBUT_REDUCTION) {
-				 reduction += montant * TAUX_REDUC_PRESTIGE;
-				 if (static_cast<ClientPrestige*>(client)->getNbPoints() < SEUIL_LIVRAISON_GRATUITE && livraison) {
-					 reduction -= getFraisTransports(static_cast<ClientPrestige*>(client)->getAddresseCode());
-				 }
-			}
-			break;
-		default:
-			
-			break;
-	}
-	return reduction;
-}
-
 
 void Restaurant::lireAdresses(const string & fichier)
 {

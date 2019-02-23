@@ -61,6 +61,7 @@ void Table::setId(int id) {
 
 void Table::setClientPrincipal(Client * clientPrincipal)
 {
+	nbClientsATable_++;
 	clientPrincipal_ = new Client(*clientPrincipal);
 }
 
@@ -94,7 +95,7 @@ double Table::getChiffreAffaire() const {
 				chiffre += static_cast <PlatBio*> (commande_[i])->getEcoTaxe();
 				break;
 			case Custom:
-				chiffre += commande_[i]->getPrix() - commande_[i]->getCout();
+				chiffre += commande_[i]->getPrix() + commande_[i]->getCout();
 				chiffre += static_cast <PlatCustom*> (commande_[i])->getSupplement();
 				break;
 
@@ -112,7 +113,8 @@ ostream& operator<<(ostream& os, const Table& table)
 	if (table.estOccupee())
 	{
 		os << " est occupee. ";
-		os << "Le client principale est :" << table.clientPrincipal_;
+		os << "Le client principale est : " << endl; 
+		os << *table.clientPrincipal_;
  		if (!table.commande_.empty())
 		{	
 			os << "Voici la commande passee par les clients : " << endl;

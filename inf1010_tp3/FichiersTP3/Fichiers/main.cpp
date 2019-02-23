@@ -39,13 +39,15 @@ int main() {
 	cout << "Livraison en cours..." << endl;
 	//Livrer les clients Marie et Martins
 
+	poly.livrerClient(cl6, commandeMarie);
+	commandeMarie.push_back("Pizza");
+	poly.livrerClient(cl6, commandeMarie);
+
+
 	poly.livrerClient(cl1, commandeMartin);
 
-	poly.livrerClient(cl6, commandeMarie);
+	cout << "Livraison reminer" << endl;
 	
-	commandeMarie.push_back("Pizza");
-
-	poly.livrerClient(cl6, commandeMarie);
 
 	
 
@@ -74,7 +76,7 @@ int main() {
 	poly2.setNom("PolyFood2");
 
 	//Affichage du restaurant poly 
-	cout << poly;
+	cout << poly << endl<< endl;
 
 	cout << "--------------------------------------------------------------------------------------------------" << endl;
 
@@ -84,6 +86,7 @@ int main() {
 	poly.libererTable(2);
 	poly.libererTable(3);
 	poly.libererTable(4);
+	poly.libererTable(5);
 
 	cout << poly;
 

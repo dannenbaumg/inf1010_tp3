@@ -39,5 +39,7 @@ string ClientPrestige::getAddressCodeString()
 ostream & operator<<(ostream & os, ClientPrestige client)
 {
 	os << "Habite dans la zone " << client.getAddressCodeString() << endl;
+	os << "Posede " << client.nbPoints_ << " points." << endl;
+
 	return os;
 }
