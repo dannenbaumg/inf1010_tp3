@@ -58,6 +58,7 @@ string Client::convertirStatutString() const
 
 ostream & operator<<(ostream & os, const Client & client)
 {
-	os << client.nom_[0] << client.prenom_ << "statut : " << client.convertirStatutString();
+	os << client.prenom_ << "  " << client.nom_  << " statut : " << client.convertirStatutString() <<endl;
+	
 	return os;
 }

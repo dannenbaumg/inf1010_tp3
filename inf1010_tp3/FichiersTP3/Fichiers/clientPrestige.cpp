@@ -33,6 +33,9 @@ string ClientPrestige::getAddressCodeString()
 	case Zone3:
 		return "Zone 3";
 		break;
+	default:
+		return "";
+		break;
 	}
 }
 

@@ -57,6 +57,7 @@ ostream& operator<<(ostream& os, const Menu& menu)
 		if (menu.listePlats_[i]->getType() == Bio) {
 			os << "comprend une taxe ecologique de : " << static_cast<PlatBio*>(menu.listePlats_[i])->getEcoTaxe() <<'$' << endl;
 		}
+
 		
 	}
 

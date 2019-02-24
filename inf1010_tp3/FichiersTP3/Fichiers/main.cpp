@@ -46,7 +46,7 @@ int main() {
 
 	poly.livrerClient(cl1, commandeMartin);
 
-	cout << "Livraison reminer" << endl;
+	cout << "Livraison terminer" << endl;
 	
 
 	

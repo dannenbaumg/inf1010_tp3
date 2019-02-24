@@ -57,9 +57,11 @@ Restaurant::~Restaurant() {
 	delete menuMatin_; 
 	delete menuMidi_; 
 	delete menuSoir_; 
-	for (unsigned i = 0; i < tables_.size() -1; ++i)
+	for (unsigned i = 0; i < tables_.size(); ++i) {
 		delete tables_[i];
 
+	}
+		
 }
 
 
@@ -93,9 +95,9 @@ double Restaurant::getFraisTransports(int index) const
 
 void Restaurant::libererTable(int id) {
 
-	bool livraison = false;
+	
 	double reduction = 0.0;
-
+	bool livraison = false;
 	for (unsigned i = 0; i < tables_.size(); ++i) {
 		if (id == tables_[i]->getId()) {
 			if (tables_[i]->estOccupee()) {
@@ -106,7 +108,8 @@ void Restaurant::libererTable(int id) {
 					reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
 					break;
 				case Prestige:
-					if (tables_[i]->getId() == INDEX_TABLE_LIVRAISON) {
+					if (i == INDEX_TABLE_LIVRAISON) {
+						
 						livraison = true;
 					}
 					reduction += calculerReduction(tables_[i]->getClientPrincipal(), tables_[i]->getChiffreAffaire(), livraison);
@@ -169,12 +172,12 @@ ostream& operator<<(ostream& os, const Restaurant& restau)
 
 	os << "-Voici son menu : " << endl;
 	os << "Matin : " << endl
-		<<*restau.menuMatin_<<endl << "Le plat le moins cher est : " << *restau.menuMatin_->trouverPlatMoinsCher() << endl;
+		<<*restau.menuMatin_<<endl << endl;
 
 	os << "Midi : " << endl
-		<< *restau.menuMidi_<<endl << "Le plat le moins cher est : " << *restau.menuMidi_->trouverPlatMoinsCher() << endl;
+		<< *restau.menuMidi_<< endl;
 	os << "Soir : " << endl
-		<< *restau.menuSoir_<<endl << "Le plat le moins cher est : " << *restau.menuSoir_->trouverPlatMoinsCher() <<endl;
+		<< *restau.menuSoir_ << endl << endl << "Le plat le moins cher est : " << *restau.menuSoir_->trouverPlatMoinsCher() << endl;
 
 
 	return os;

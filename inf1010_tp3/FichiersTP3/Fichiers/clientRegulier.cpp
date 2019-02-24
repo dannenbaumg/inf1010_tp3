@@ -26,7 +26,7 @@ void ClientRegulier::augmenterNbPoints(int bonus)
 
 ostream & operator<<(ostream & os, const ClientRegulier & client)
 {
-	os << "Posede " << client.nbPoints_ << " points." << endl;
+	os << "  Posede " << client.nbPoints_ << " points." << endl;
 	return os;
 
 }

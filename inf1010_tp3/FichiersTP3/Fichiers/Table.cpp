@@ -115,12 +115,27 @@ ostream& operator<<(ostream& os, const Table& table)
 		os << " est occupee. ";
 		os << "Le client principale est : " << endl; 
 		os << *table.clientPrincipal_;
+
+		if (table.clientPrincipal_->getStatut() == Fidele) {
+			ClientRegulier* clientReg;
+			clientReg = static_cast<ClientRegulier*>(table.clientPrincipal_);
+			os << *clientReg;
+		} else if (table.clientPrincipal_->getStatut() == Prestige) {
+			ClientPrestige* clientReg;
+			clientReg = static_cast<ClientPrestige*>(table.clientPrincipal_);
+			os << *clientReg;
+		}
+
  		if (!table.commande_.empty())
 		{	
 			os << "Voici la commande passee par les clients : " << endl;
 			for (unsigned i = 0; i < table.commande_.size(); ++i)
 			{
 				os << "\t" << *table.commande_[i];
+				if (table.commande_[i]->getType() == Custom) {
+					PlatCustom* ptrCustom = static_cast<PlatCustom*>(table.commande_[i]);
+					os << *ptrCustom;
+				}
 			}
 		}
 		else
